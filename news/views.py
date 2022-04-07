@@ -6,7 +6,7 @@ from .models import Post, Category, BaseRegisterForm
 from .filter import PostFilter
 from .forms import PostForm
 
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from django.contrib.auth.models import User, Group
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.contrib.auth.decorators import login_required
@@ -117,4 +117,12 @@ def upgrade_me(request):
 
 
 class AddNews(PermissionRequiredMixin, CreateView):
-    permission_required = ('post.add_news')
+    permission_required = ('news.add_post')
+
+
+class UpdateNews(PermissionRequiredMixin, UpdateView):
+    permission_required = ('news.change_post')
+
+
+class DeleteNews(PermissionRequiredMixin, DeleteView):
+    permission_required = ('news.delete_post')
