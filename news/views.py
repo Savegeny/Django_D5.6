@@ -72,22 +72,25 @@ class PostDetailView(DetailView):
     queryset = Post.objects.all()
 
 
-class PostAddView(CreateView):
+class PostAddView(PermissionRequiredMixin, CreateView):
     template_name = "news_app/post_create.html"
     form_class = PostForm
+    permission_required = ('news.add_post')
 
 
-class PostUpdateView(UpdateView):
+class PostUpdateView(PermissionRequiredMixin, UpdateView):
     template_name = "news_app/post_create.html"
     form_class = PostForm
+    permission_required = ('news.change_post')
 
     def get_object(self, **kwargs):
         id = self.kwargs.get("pk")
         return Post.objects.get(pk=id)
 
 
-class PostDeleteView(DeleteView):
+class PostDeleteView(PermissionRequiredMixin, DeleteView):
     template_name = "news_app/post_delete.html"
+    permission_required = ('news.delete_post')
     queryset = Post.objects.all()
     success_url = "/news/"
 
@@ -114,15 +117,3 @@ def upgrade_me(request):
     if not request.user.groups.filter(name='authors').exists():
         authors_group.user_set.add(user)
     return redirect('/')
-
-
-class AddNews(PermissionRequiredMixin, CreateView):
-    permission_required = ('news.add_post')
-
-
-class UpdateNews(PermissionRequiredMixin, UpdateView):
-    permission_required = ('news.change_post')
-
-
-class DeleteNews(PermissionRequiredMixin, DeleteView):
-    permission_required = ('news.delete_post')
